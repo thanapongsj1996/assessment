@@ -2,12 +2,14 @@ package config
 
 import "os"
 
-type A struct {
-	Port string
+type AppEnv struct {
+	Port        string
+	DatabaseUrl string
 }
 
-func AppConfig() A {
-	return  A{
-		Port: os.Getenv("PORT"),
+func AppConfig() AppEnv {
+	return AppEnv{
+		Port:        os.Getenv("PORT"),
+		DatabaseUrl: os.Getenv("DATABASE_URL"),
 	}
 }

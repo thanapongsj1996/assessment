@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -12,6 +11,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/subosito/gotenv"
 	"github.com/thanapongsj1996/assessment/config"
+	"github.com/thanapongsj1996/assessment/database"
 )
 
 func init() {
@@ -23,13 +23,19 @@ func main() {
 
 	// Environment config
 	appConfig := config.AppConfig()
+
+	// Init Database
+	database.InitDB(appConfig.DatabaseUrl)
+	//db := database.GetDB()
+	defer database.CloseDB()
+
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 
 	// Start server
 	go func() {
-		if err := e.Start(fmt.Sprintf(":%s", appConfig.Port)); err != nil && err != http.ErrServerClosed {
+		if err := e.Start(":" + appConfig.Port); err != nil && err != http.ErrServerClosed {
 			e.Logger.Fatal("shutting down the server")
 		}
 	}()
