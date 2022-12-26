@@ -2,6 +2,10 @@ package main
 
 import (
 	"context"
+	"github.com/thanapongsj1996/assessment/modules/expense/handler"
+	"github.com/thanapongsj1996/assessment/modules/expense/repository"
+	"github.com/thanapongsj1996/assessment/modules/expense/service"
+	"github.com/thanapongsj1996/assessment/routes"
 	"net/http"
 	"os"
 	"os/signal"
@@ -26,12 +30,15 @@ func main() {
 
 	// Init Database
 	database.InitDB(appConfig.DatabaseUrl)
-	//db := database.GetDB()
+	db := database.GetDB()
 	defer database.CloseDB()
 
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
+	expenseRepo := repository.ExpenseRepository(db)
+	expenseService := service.NewExpenseService(expenseRepo)
+	expenseHandler := handler.NewExpenseHandler(expenseService)
+
+	// Init routes
+	routes.NewExpenseRoute(e, expenseHandler)
 
 	// Start server
 	go func() {
