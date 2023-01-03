@@ -3,14 +3,15 @@ module github.com/thanapongsj1996/assessment
 go 1.19
 
 require (
+	github.com/jinzhu/copier v0.3.5
 	github.com/labstack/echo/v4 v4.9.1
+	github.com/lib/pq v1.10.7
 	github.com/subosito/gotenv v1.4.1
 	gorm.io/driver/postgres v1.4.5
 	gorm.io/gorm v1.24.2
 )
 
 require (
-	github.com/go-gormigrate/gormigrate/v2 v2.0.2 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.13.0 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect

@@ -8,5 +8,5 @@ import (
 func NewExpenseRoute(e *echo.Echo, handler handler.ExpenseHandler) {
 	routes := e.Group("expenses")
 
-	routes.GET("", handler.Test)
+	routes.POST("", handler.AddExpense)
 }

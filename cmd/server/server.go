@@ -33,7 +33,7 @@ func main() {
 	db := database.GetDB()
 	defer database.CloseDB()
 
-	expenseRepo := repository.ExpenseRepository(db)
+	expenseRepo := repository.NewExpenseRepository(db)
 	expenseService := service.NewExpenseService(expenseRepo)
 	expenseHandler := handler.NewExpenseHandler(expenseService)
 
