@@ -22,7 +22,7 @@ func (s mockExpenseService) AddExpense(req dto.AddExpenseReq) (*dto.AddExpenseRe
 	}, nil
 }
 
-func TestAddExpenseSuccess(t *testing.T) {
+func TestHandlerAddExpenseSuccess(t *testing.T) {
 	addExpenseRequestJsonBody := `{"title":"strawberry smoothie","amount":98,"note":"note","tags":["food","beverage"]}`
 	expectResponseBody := `{"id":1,"title":"strawberry smoothie","amount":98,"note":"note","tags":["food","beverage"]}`
 
@@ -42,7 +42,7 @@ func TestAddExpenseSuccess(t *testing.T) {
 	}
 }
 
-func TestAddExpenseBadRequest(t *testing.T) {
+func TestHandlerAddExpenseBadRequest(t *testing.T) {
 	addExpenseRequestJsonBody := `{"title":"strawberry smoothie","amount":98,"note":"qqq","tags":"food"}`
 	expectResponseBody := "\"Can not bind data\""
 
