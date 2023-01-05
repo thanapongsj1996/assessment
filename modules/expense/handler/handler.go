@@ -23,8 +23,8 @@ func (h *ExpenseHandler) AddExpense(c echo.Context) error {
 
 	result, err := h.expenseService.AddExpense(addExpenseReq)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, "-")
+		c.JSON(http.StatusInternalServerError, err.Error())
 	}
 
-	return c.JSON(200, result)
+	return c.JSON(http.StatusCreated, result)
 }

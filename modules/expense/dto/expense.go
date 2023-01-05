@@ -8,6 +8,9 @@ type AddExpenseReq struct {
 }
 
 type AddExpenseRes struct {
-	ID int `json:"id"`
-	AddExpenseReq
+	ID     int      `json:"id"`
+	Title  string   `json:"title"`
+	Amount float64  `json:"amount"`
+	Note   string   `json:"note"`
+	Tags   []string `json:"tags"`
 }
