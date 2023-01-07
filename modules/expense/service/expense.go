@@ -56,3 +56,15 @@ func (s expenseService) UpdateExpense(id int, req dto.ExpenseReq) (*dto.ExpenseR
 
 	return &response, nil
 }
+
+func (s expenseService) GetAllExpenses() (*[]dto.ExpenseRes, error) {
+	result, err := s.expenseRepo.GetAllExpenses()
+	if err != nil {
+		return nil, err
+	}
+
+	var response []dto.ExpenseRes
+	copier.Copy(&response, result)
+
+	return &response, nil
+}

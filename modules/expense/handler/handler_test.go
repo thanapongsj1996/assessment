@@ -42,6 +42,25 @@ func (s mockExpenseService) UpdateExpense(id int, req dto.ExpenseReq) (*dto.Expe
 	}, nil
 }
 
+func (s mockExpenseService) GetAllExpenses() (*[]dto.ExpenseRes, error) {
+	return &[]dto.ExpenseRes{
+		{
+			ID:     1,
+			Title:  "strawberry smoothie",
+			Amount: 98,
+			Note:   "note",
+			Tags:   []string{"food", "beverage"},
+		},
+		{
+			ID:     2,
+			Title:  "apple smoothie",
+			Amount: 89,
+			Note:   "no discount",
+			Tags:   []string{"beverage"},
+		},
+	}, nil
+}
+
 func TestHandlerAddExpenseSuccess(t *testing.T) {
 	addExpenseRequestJsonBody := `{"title":"strawberry smoothie","amount":98,"note":"note","tags":["food","beverage"]}`
 	expectResponseBody := `{"id":1,"title":"strawberry smoothie","amount":98,"note":"note","tags":["food","beverage"]}`
@@ -122,6 +141,25 @@ func TestHandlerUpdateExpenseSuccess(t *testing.T) {
 
 	// Assertions
 	if assert.NoError(t, h.UpdateExpense(c)) {
+		assert.Equal(t, http.StatusOK, rec.Code)
+		assert.Equal(t, expectResponseBody, strings.TrimSuffix(rec.Body.String(), "\n"))
+	}
+}
+
+func TestHandlerGetAllExpensesSuccess(t *testing.T) {
+	expectResponseBody := `[{"id":1,"title":"strawberry smoothie","amount":98,"note":"note","tags":["food","beverage"]},{"id":2,"title":"apple smoothie","amount":89,"note":"no discount","tags":["beverage"]}]`
+
+	// Setup
+	e := echo.New()
+	req := httptest.NewRequest(http.MethodGet, "/expenses", nil)
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	mockService := mockExpenseService{}
+	h := NewExpenseHandler(mockService)
+
+	// Assertions
+	if assert.NoError(t, h.GetAllExpenses(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Equal(t, expectResponseBody, strings.TrimSuffix(rec.Body.String(), "\n"))
 	}

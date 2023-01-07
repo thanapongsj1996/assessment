@@ -64,3 +64,12 @@ func (h *ExpenseHandler) UpdateExpense(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, result)
 }
+
+func (h *ExpenseHandler) GetAllExpenses(c echo.Context) error {
+	result, err := h.expenseService.GetAllExpenses()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, result)
+}

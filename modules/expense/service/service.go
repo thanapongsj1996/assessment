@@ -6,4 +6,5 @@ type ExpenseService interface {
 	AddExpense(req dto.ExpenseReq) (*dto.ExpenseRes, error)
 	GetExpenseByID(id int) (*dto.ExpenseRes, error)
 	UpdateExpense(id int, req dto.ExpenseReq) (*dto.ExpenseRes, error)
+	GetAllExpenses() (*[]dto.ExpenseRes, error)
 }

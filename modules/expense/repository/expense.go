@@ -47,3 +47,12 @@ func (r expenseRepository) UpdateExpense(id int, expense model.Expense) (*model.
 
 	return &expense, nil
 }
+
+func (r expenseRepository) GetAllExpenses() (*[]model.Expense, error) {
+	var expense []model.Expense
+	tx := r.db.Table(expenseTable).Find(&expense)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	return &expense, nil
+}
