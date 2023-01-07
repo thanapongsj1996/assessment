@@ -23,3 +23,12 @@ func (r expenseRepository) SaveExpense(expense model.Expense) (*model.Expense, e
 
 	return &expense, nil
 }
+
+func (r expenseRepository) GetExpenseByID(id int) (*model.Expense, error) {
+	expense := model.Expense{}
+	tx := r.db.Table(expenseTable).Where("id = ?", id).First(&expense)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	return &expense, nil
+}

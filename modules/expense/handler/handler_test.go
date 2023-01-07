@@ -12,8 +12,18 @@ import (
 
 type mockExpenseService struct{}
 
-func (s mockExpenseService) AddExpense(req dto.AddExpenseReq) (*dto.AddExpenseRes, error) {
-	return &dto.AddExpenseRes{
+func (s mockExpenseService) AddExpense(req dto.ExpenseReq) (*dto.ExpenseRes, error) {
+	return &dto.ExpenseRes{
+		ID:     1,
+		Title:  "strawberry smoothie",
+		Amount: 98,
+		Note:   "note",
+		Tags:   []string{"food", "beverage"},
+	}, nil
+}
+
+func (s mockExpenseService) GetExpenseByID(id int) (*dto.ExpenseRes, error) {
+	return &dto.ExpenseRes{
 		ID:     1,
 		Title:  "strawberry smoothie",
 		Amount: 98,
@@ -58,6 +68,28 @@ func TestHandlerAddExpenseBadRequest(t *testing.T) {
 	// Assertions
 	if assert.NoError(t, h.AddExpense(c)) {
 		assert.Equal(t, http.StatusBadRequest, rec.Code)
+		assert.Equal(t, expectResponseBody, strings.TrimSuffix(rec.Body.String(), "\n"))
+	}
+}
+
+func TestHandlerGetExpenseSuccess(t *testing.T) {
+	expectResponseBody := `{"id":1,"title":"strawberry smoothie","amount":98,"note":"note","tags":["food","beverage"]}`
+
+	// Setup
+	e := echo.New()
+	req := httptest.NewRequest(http.MethodGet, "/expenses", nil)
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	c.SetPath("/:id")
+	c.SetParamNames("id")
+	c.SetParamValues("1")
+	mockService := mockExpenseService{}
+	h := NewExpenseHandler(mockService)
+
+	// Assertions
+	if assert.NoError(t, h.GetExpenseByID(c)) {
+		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Equal(t, expectResponseBody, strings.TrimSuffix(rec.Body.String(), "\n"))
 	}
 }

@@ -9,4 +9,5 @@ func NewExpenseRoute(e *echo.Echo, handler handler.ExpenseHandler) {
 	routes := e.Group("expenses")
 
 	routes.POST("", handler.AddExpense)
+	routes.GET("/:id", handler.GetExpenseByID)
 }

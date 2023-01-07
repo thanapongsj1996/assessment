@@ -15,7 +15,7 @@ func NewExpenseService(repo repository.ExpenseRepository) ExpenseService {
 	return expenseService{expenseRepo: repo}
 }
 
-func (s expenseService) AddExpense(req dto.AddExpenseReq) (*dto.AddExpenseRes, error) {
+func (s expenseService) AddExpense(req dto.ExpenseReq) (*dto.ExpenseRes, error) {
 	expense := model.Expense{}
 	copier.Copy(&expense, &req)
 
@@ -24,7 +24,19 @@ func (s expenseService) AddExpense(req dto.AddExpenseReq) (*dto.AddExpenseRes, e
 		return nil, err
 	}
 
-	response := dto.AddExpenseRes{}
+	response := dto.ExpenseRes{}
+	copier.Copy(&response, result)
+
+	return &response, nil
+}
+
+func (s expenseService) GetExpenseByID(id int) (*dto.ExpenseRes, error) {
+	result, err := s.expenseRepo.GetExpenseByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	response := dto.ExpenseRes{}
 	copier.Copy(&response, result)
 
 	return &response, nil
