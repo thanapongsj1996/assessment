@@ -41,3 +41,18 @@ func (s expenseService) GetExpenseByID(id int) (*dto.ExpenseRes, error) {
 
 	return &response, nil
 }
+
+func (s expenseService) UpdateExpense(id int, req dto.ExpenseReq) (*dto.ExpenseRes, error) {
+	expense := model.Expense{}
+	copier.Copy(&expense, &req)
+
+	result, err := s.expenseRepo.UpdateExpense(id, expense)
+	if err != nil {
+		return nil, err
+	}
+
+	response := dto.ExpenseRes{}
+	copier.Copy(&response, result)
+
+	return &response, nil
+}

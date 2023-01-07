@@ -32,3 +32,18 @@ func (r expenseRepository) GetExpenseByID(id int) (*model.Expense, error) {
 	}
 	return &expense, nil
 }
+
+func (r expenseRepository) UpdateExpense(id int, expense model.Expense) (*model.Expense, error) {
+	_, err := r.GetExpenseByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	expense.ID = id
+	tx := r.db.Table(expenseTable).Save(&expense)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	return &expense, nil
+}

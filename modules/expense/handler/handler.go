@@ -44,3 +44,23 @@ func (h *ExpenseHandler) GetExpenseByID(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, result)
 }
+
+func (h *ExpenseHandler) UpdateExpense(c echo.Context) error {
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, "Can not bind data")
+	}
+
+	updateExpenseReq := dto.ExpenseReq{}
+	if err := c.Bind(&updateExpenseReq); err != nil {
+		return c.JSON(http.StatusBadRequest, "Can not bind data")
+	}
+
+	result, err := h.expenseService.UpdateExpense(id, updateExpenseReq)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, result)
+}

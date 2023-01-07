@@ -10,4 +10,5 @@ func NewExpenseRoute(e *echo.Echo, handler handler.ExpenseHandler) {
 
 	routes.POST("", handler.AddExpense)
 	routes.GET("/:id", handler.GetExpenseByID)
+	routes.PUT("/:id", handler.UpdateExpense)
 }

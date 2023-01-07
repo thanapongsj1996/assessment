@@ -29,6 +29,15 @@ func (r mockExpenseRepository) GetExpenseByID(id int) (*model.Expense, error) {
 		Tags:   []string{"food", "beverage"},
 	}, nil
 }
+func (r mockExpenseRepository) UpdateExpense(id int, expense model.Expense) (*model.Expense, error) {
+	return &model.Expense{
+		ID:     1,
+		Title:  "strawberry smoothie",
+		Amount: 98,
+		Note:   "updated note",
+		Tags:   []string{"food", "beverage"},
+	}, nil
+}
 
 func TestServiceAddExpenseSuccess(t *testing.T) {
 	mockRepo := mockExpenseRepository{}
@@ -65,6 +74,33 @@ func TestServiceGetExpenseSuccess(t *testing.T) {
 	}
 
 	got, err := service.GetExpenseByID(1)
+	if !reflect.DeepEqual(want, got) {
+		t.Errorf("expect %v got %v", want, got)
+	}
+	if !errors.Is(err, nil) {
+		t.Errorf("expect %v got %v", nil, err)
+	}
+}
+
+func TestServiceUpdateExpenseSuccess(t *testing.T) {
+	mockRepo := mockExpenseRepository{}
+	service := NewExpenseService(mockRepo)
+
+	updateExpenseReq := dto.ExpenseReq{
+		Title:  "strawberry smoothie",
+		Amount: 98,
+		Note:   "updated note",
+		Tags:   []string{"food", "beverage"},
+	}
+	want := &dto.ExpenseRes{
+		ID:     1,
+		Title:  "strawberry smoothie",
+		Amount: 98,
+		Note:   "updated note",
+		Tags:   []string{"food", "beverage"},
+	}
+
+	got, err := service.UpdateExpense(1, updateExpenseReq)
 	if !reflect.DeepEqual(want, got) {
 		t.Errorf("expect %v got %v", want, got)
 	}
