@@ -40,6 +40,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Test secret
+        run: echo ${{ secrets.PASS }}
+
       - name: Setup SHA
         run: echo "GITHUB_SHA=${GITHUB_SHA}" >> $GITHUB_ENV
 
