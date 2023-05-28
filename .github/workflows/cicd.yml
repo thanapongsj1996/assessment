@@ -32,10 +32,10 @@ jobs:
   #       env:
   #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  build-and-push-docker-image:
-    name: Build Docker image and push to repositories
+  build-docker-image:
+    name: Build Docker image
     runs-on: ubuntu-latest
-    needs: quality-check
+    # needs: quality-check
 
     steps:
       - uses: actions/checkout@v3
