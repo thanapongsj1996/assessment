@@ -1,10 +1,10 @@
 package database
 
 import (
-	"gorm.io/driver/postgres"
-	_ "gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"log"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 var db *gorm.DB
@@ -14,7 +14,8 @@ func InitDB(connectionStr string) {
 
 	db, err = gorm.Open(postgres.Open(connectionStr), &gorm.Config{})
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	CreateTableExpenses()

@@ -5,12 +5,6 @@ package integration_tests
 import (
 	"context"
 	"fmt"
-	"github.com/thanapongsj1996/assessment/database"
-	"github.com/thanapongsj1996/assessment/modules/expense/handler"
-	"github.com/thanapongsj1996/assessment/modules/expense/model"
-	"github.com/thanapongsj1996/assessment/modules/expense/repository"
-	"github.com/thanapongsj1996/assessment/modules/expense/service"
-	"github.com/thanapongsj1996/assessment/routes"
 	"io/ioutil"
 	"log"
 	"net"
@@ -18,6 +12,13 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/thanapongsj1996/assessment/database"
+	"github.com/thanapongsj1996/assessment/modules/expense/handler"
+	"github.com/thanapongsj1996/assessment/modules/expense/model"
+	"github.com/thanapongsj1996/assessment/modules/expense/repository"
+	"github.com/thanapongsj1996/assessment/modules/expense/service"
+	"github.com/thanapongsj1996/assessment/routes"
 
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"

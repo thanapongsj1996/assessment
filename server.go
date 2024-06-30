@@ -2,15 +2,16 @@ package main
 
 import (
 	"context"
-	"github.com/thanapongsj1996/assessment/modules/expense/handler"
-	"github.com/thanapongsj1996/assessment/modules/expense/repository"
-	"github.com/thanapongsj1996/assessment/modules/expense/service"
-	"github.com/thanapongsj1996/assessment/routes"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/thanapongsj1996/assessment/modules/expense/handler"
+	"github.com/thanapongsj1996/assessment/modules/expense/repository"
+	"github.com/thanapongsj1996/assessment/modules/expense/service"
+	"github.com/thanapongsj1996/assessment/routes"
 
 	"github.com/labstack/echo/v4"
 	"github.com/subosito/gotenv"
@@ -39,6 +40,11 @@ func main() {
 
 	// Init routes
 	routes.NewExpenseRoute(e, expenseHandler)
+
+	// health
+	e.GET("/health", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, "ok")
+	})
 
 	// Start server
 	go func() {

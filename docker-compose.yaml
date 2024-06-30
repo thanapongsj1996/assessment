@@ -1,0 +1,15 @@
+version: '3.2'
+
+networks:
+  default:
+
+services:
+  db:
+    image: postgres:12.12
+    container_name: kkgo
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: kkgo
+    ports:
+      - "5432:5432"
