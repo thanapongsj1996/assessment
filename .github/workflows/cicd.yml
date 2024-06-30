@@ -69,7 +69,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: thanapongsj/go-api:latest,thanapongsj/go-api:${{ github.sha::6 }}
+          tags: thanapongsj/go-api:latest,thanapongsj/go-api:${{ github.sha }}
 
       #### PUSH TO GHCR
       # - name: Login ghcr.io
@@ -118,10 +118,10 @@ jobs:
           git checkout main
 
           # Update the K8s deployment file using yq
-          yq eval ".spec.template.spec.containers[0].image |= \"thanapongsj/go-api:${{ github.sha::6 }}\"" -i ./kubernetes/go-api/prod/deployment.yml
+          yq eval ".spec.template.spec.containers[0].image |= \"thanapongsj/go-api:${{ github.sha }}\"" -i ./kubernetes/go-api/prod/deployment.yml
 
           git add kube-gitops/deployment.yml
-          git commit -m "🤖 change docker image version to ${{ github.sha::6 }}"
+          git commit -m "🤖 change docker image version to ${{ github.sha }}"
 
       - name: push changes
         uses: ad-m/github-push-action@master
