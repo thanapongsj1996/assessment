@@ -120,7 +120,7 @@ jobs:
           # Update the K8s deployment file using yq
           yq eval ".spec.template.spec.containers[0].image |= \"thanapongsj/go-api:${{ github.sha }}\"" -i ./kubernetes/go-api/prod/deployment.yml
 
-          git add kube-gitops/deployment.yml
+          git add kubernetes/go-api/prod/deployment.yml
           git commit -m "🤖 change docker image version to ${{ github.sha }}"
 
       - name: push changes
