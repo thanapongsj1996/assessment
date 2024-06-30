@@ -43,7 +43,7 @@ func main() {
 
 	// health
 	e.GET("/health", func(c echo.Context) error {
-		return c.JSON(http.StatusOK, "ok")
+		return c.JSON(http.StatusOK, "ok updated")
 	})
 
 	// Start server
