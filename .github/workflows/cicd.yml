@@ -51,7 +51,7 @@ jobs:
         run: echo "GITHUB_SHA=${GITHUB_SHA}" >> $GITHUB_ENV
 
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag ghcr.io/thanapong1996/assessment:${{ env.GITHUB_SHA }}
+        run: docker build . --file Dockerfile
 
       - name: Integration test inside Docker-compose cleanup
         run: docker-compose -f docker-compose.test.yml down

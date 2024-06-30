@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: devops
+spec:
+  selector:
+    matchLabels:
+      app: api
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+      - name: pun-api
+        image: ghcr.io/thanapongsj1996/thanapongsj1996/assessment:2f2db3d0e5b7a196f075d43118d7f3ca5d910444
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: api.service.port
