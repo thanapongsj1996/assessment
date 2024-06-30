@@ -13,9 +13,11 @@ spec:
       labels:
         app: api
     spec:
+      imagePullSecrets:
+      - name: dockerhub-secret
       containers:
       - name: pun-api
-        image: ghcr.io/thanapongsj1996/thanapongsj1996/assessment:2f2db3d0e5b7a196f075d43118d7f3ca5d910444
+        image: thanapongsj/go-api:e6ac55127f951250b9e15a52a225e55ff394e0e0
         imagePullPolicy: Always
         ports:
         - containerPort: 8080

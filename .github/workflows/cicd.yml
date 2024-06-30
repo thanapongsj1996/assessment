@@ -36,7 +36,7 @@ jobs:
   #       env:
   #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  build-docker-image:
+  build-and-push-docker-image:
     name: Build Docker image
     runs-on: ubuntu-latest
     # needs: quality-check
@@ -69,7 +69,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: thanapongsj/go-api:latest,thanapongsj/go-api:${{ github.sha }}
+          tags: thanapongsj/go-api:latest,thanapongsj/go-api:${{ github.sha::6 }}
 
       #### PUSH TO GHCR
       # - name: Login ghcr.io
@@ -92,7 +92,7 @@ jobs:
       #   with:
       #     context: .
       #     tags: |
-      #       ghcr.io/thanapong1996/assessment:${{ env.GITHUB_SHA }}
+      #       ghcr.io/thanapongsj1996/assessment:${{ env.GITHUB_SHA }}
       #     # build on feature branches, push only on main branch
       #     push: ${{ github.ref == 'refs/heads/main' }}
 
@@ -101,27 +101,31 @@ jobs:
   # ==============
   # CD task
   # ==============
-  # gitops-versioning:
-  #   runs-on: ubuntu-latest
-  #   needs: build-and-push-docker-image
-  #   steps:
-  #     - name: checkout
-  #       uses: actions/checkout@v2
-  #       with:
-  #         repository: aorjoa-training/devops-argocd
-  #         persist-credentials: false
-  #         fetch-depth: 0
-  #     - name: change image tag
-  #       run: |
-  #         git --version
-  #         git config user.name "aorjoa"
-  #         git config user.email "root@aorjoa.link"
-  #         sed -i -E "s/ghcr.io\/aorjoa-training\/devops-go-example.*$/ghcr.io\/aorjoa-training\/devops-go-example:${GITHUB_SHA}/" kube-gitops/deployment.yml
-  #         git add kube-gitops/deployment.yml
-  #         git commit -m "🤖 change docker image version to ${GITHUB_SHA}"
-  #     - name: push changes
-  #       uses: ad-m/github-push-action@master
-  #       with:
-  #         github_token: ${{ secrets.PAT }}
-  #         repository: aorjoa-training/devops-argocd
-  #         branch: main
+  gitops-versioning:
+    runs-on: ubuntu-latest
+    needs: build-and-push-docker-image
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          repository: thanapongsj1996/devops-argocd
+          persist-credentials: false
+          fetch-depth: 0
+      - name: change image tag
+        run: |
+          git config --local user.email "admin@github.com"
+          git config --local user.name "GitHub Action"
+          git checkout main
+
+          # Update the K8s deployment file using yq
+          yq eval ".spec.template.spec.containers[0].image |= \"thanapongsj/go-api:${{ github.sha::6 }}\"" -i ./kubernetes/go-api/prod/deployment.yml
+
+          git add kube-gitops/deployment.yml
+          git commit -m "🤖 change docker image version to ${{ github.sha::6 }}"
+
+      - name: push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PAT }}
+          repository: thanapongsj1996/devops-argocd
+          branch: main
